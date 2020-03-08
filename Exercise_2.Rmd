@@ -135,6 +135,7 @@ k_vs_rmean = ggplot(data = kframe) +
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
 k_vs_rmean
 
+print(min(kframe$RMEAN))
 
 ```
 
@@ -251,6 +252,7 @@ k_vs_rmean = ggplot(data = kframe) +
 k_vs_rmean
 
 
+print(min(kframe$RMEAN))
 ```
 
 
