@@ -14,6 +14,7 @@ rmse = function(y, ypred) {
   sqrt(mean(data.matrix((y-ypred)^2)))
 }
 k_vs_rmean = NULL
+set.seed(3)
 ```
 
 ## GitHub Documents
@@ -24,7 +25,7 @@ This is an R Markdown format used for publishing markdown documents to GitHub. W
 
 We wil be using the K-nearest neighbors technique to predict the price of Mercedes S Class vehicles based on gas mileage. We will be distinguishing these S Class vehicles by trim. In particular, we will be focusing on just two values of trim: 350 and 65 AMG, and finding optimal values of K for predicting the price of each.
 
-# KNN functions for 350 trim vehciles
+### KNN functions for 350 trim vehciles
 ```{r sclass_350, echo=FALSE, autodep=TRUE}
 # Focus on 2 trim levels: 350 and 65 AMG
 sclass350 = subset(sclass, trim == '350')
@@ -81,12 +82,6 @@ p_test_3 = ggplot(data = test) +
 p_test_3
 rmse(y_test, ypred_knn3)
 
-p_test_5 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn5), color='red')
-
-p_test_5
-rmse(y_test, ypred_knn5)
 
 p_test_10 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
@@ -95,13 +90,6 @@ p_test_10 = ggplot(data = test) +
 p_test_10
 rmse(y_test, ypred_knn10)
 
-p_test_20 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn20), color='red')
-
-p_test_20
-rmse(y_test, ypred_knn20)
-
 p_test_50 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn50), color='red')
@@ -109,19 +97,6 @@ p_test_50 = ggplot(data = test) +
 p_test_50
 rmse(y_test, ypred_knn50)
 
-p_test_100 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn100), color='red')
-
-p_test_100
-rmse(y_test, ypred_knn100)
-
-p_test_250 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn250), color='red')
-
-p_test_250
-rmse(y_test, ypred_knn250)
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
 while (i <= 250) {
@@ -135,10 +110,9 @@ while (i <= 250) {
 k_vs_rmean = ggplot(data = kframe) + 
   geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
-
 ```
 
-Here we plot the average RMSE for each value of K from 3 to 250, and find that the optimal value of K is 
+Here we plot the average RMSE for each value of K from 3 to 250, and find that the optimal value of K is `r which(kframe$RMEAN==min(kframe$RMEAN)) + 2` 
 
 ```{r sclass_350_2, echo=FALSE, autodep=TRUE}
 
@@ -146,7 +120,7 @@ k_vs_rmean
 
 ```
 
-# 65 AMG
+### 65 AMG
 
 
 ```{r sclass_65, echo=FALSE}
@@ -202,13 +176,6 @@ p_test_3 = ggplot(data = test) +
 p_test_3
 rmse(y_test, ypred_knn3)
 
-p_test_5 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn5), color='red')
-
-p_test_5
-rmse(y_test, ypred_knn5)
-
 p_test_10 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn10), color='red')
@@ -216,12 +183,6 @@ p_test_10 = ggplot(data = test) +
 p_test_10
 rmse(y_test, ypred_knn10)
 
-p_test_20 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn20), color='red')
-
-p_test_20
-rmse(y_test, ypred_knn20)
 
 p_test_50 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
@@ -229,22 +190,6 @@ p_test_50 = ggplot(data = test) +
 
 p_test_50
 rmse(y_test, ypred_knn50)
-
-p_test_100 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn100), color='red')
-
-p_test_100
-rmse(y_test, ypred_knn100)
-
-p_test_200 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn200), color='red')
-
-p_test_200
-rmse(y_test, ypred_knn200)
-
-
 
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
@@ -256,14 +201,16 @@ while (i <= 200) {
 k_vs_rmean = ggplot(data = kframe) + 
   geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
-
-print(min(kframe$RMEAN))
 ```
 
-write stuff here!
+Here we plot the average RMSE for each value of K from 3 to 200, and find that the optimal value of K is `r which(kframe$RMEAN==min(kframe$RMEAN)) + 2`
 
 ```{r sclass_65_2, echo=FALSE, autodep=TRUE}
 
 k_vs_rmean
 
 ```
+
+### Conclusion
+
+The optimal value of K is larger for the 350 trim vehicles than the 65 AMG. One explanation for this is that the sample set of 350 trim vehichles is also larger than the set of 65 AMG vehicles. As the value of K gets closer to the size of the entire sample, KNN becomes less useful in estimating the price for a specific mileage value.  

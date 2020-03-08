@@ -15,77 +15,52 @@ distinguishing these S Class vehicles by trim. In particular, we will be
 focusing on just two values of trim: 350 and 65 AMG, and finding optimal
 values of K for predicting the price of each.
 
-# KNN functions for 350 trim vehciles
+### KNN functions for 350 trim vehciles
 
     ## [1] 416  17
 
 ![](Exercise_2_files/figure-gfm/sclass_350-1.png)<!-- -->
 
-    ## [1] 11847.07
+    ## [1] 12840.47
 
 ![](Exercise_2_files/figure-gfm/sclass_350-2.png)<!-- -->
 
-    ## [1] 11063.13
+    ## [1] 11145.72
 
 ![](Exercise_2_files/figure-gfm/sclass_350-3.png)<!-- -->
 
-    ## [1] 10708.52
-
-![](Exercise_2_files/figure-gfm/sclass_350-4.png)<!-- -->
-
-    ## [1] 10784.93
-
-![](Exercise_2_files/figure-gfm/sclass_350-5.png)<!-- -->
-
-    ## [1] 11158.3
-
-![](Exercise_2_files/figure-gfm/sclass_350-6.png)<!-- -->
-
-    ## [1] 12366.65
-
-![](Exercise_2_files/figure-gfm/sclass_350-7.png)<!-- -->
-
-    ## [1] 17835.59
+    ## [1] 10836.89
 
 Here we plot the average RMSE for each value of K from 3 to 250, and
-find that the optimal value of K is
+find that the optimal value of K is 40
 
 ![](Exercise_2_files/figure-gfm/sclass_350_2-1.png)<!-- -->
 
-# 65 AMG
+### 65 AMG
 
     ## [1] 292  17
 
 ![](Exercise_2_files/figure-gfm/sclass_65-1.png)<!-- -->
 
-    ## [1] 18121.99
+    ## [1] 21548.25
 
 ![](Exercise_2_files/figure-gfm/sclass_65-2.png)<!-- -->
 
-    ## [1] 17064.17
+    ## [1] 18415.24
 
 ![](Exercise_2_files/figure-gfm/sclass_65-3.png)<!-- -->
 
-    ## [1] 16939.4
+    ## [1] 21996.04
 
-![](Exercise_2_files/figure-gfm/sclass_65-4.png)<!-- -->
-
-    ## [1] 18274.73
-
-![](Exercise_2_files/figure-gfm/sclass_65-5.png)<!-- -->
-
-    ## [1] 26557.62
-
-![](Exercise_2_files/figure-gfm/sclass_65-6.png)<!-- -->
-
-    ## [1] 39128.37
-
-![](Exercise_2_files/figure-gfm/sclass_65-7.png)<!-- -->
-
-    ## [1] 68063.88
-
-    ## [1] 16939.4
-
-write stuff here\!
+Here we plot the average RMSE for each value of K from 3 to 200, and
+find that the optimal value of K is 22
 
 ![](Exercise_2_files/figure-gfm/sclass_65_2-1.png)<!-- -->
+
+### Conclusion
+
+The optimal value of K is larger for the 350 trim vehicles than the 65
+AMG. One explanation for this is that the sample set of 350 trim
+vehichles is also larger than the set of 65 AMG vehicles. As the value
+of K gets closer to the size of the entire sample, KNN becomes less
+useful in estimating the price for a specific mileage value.
