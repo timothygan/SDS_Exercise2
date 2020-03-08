@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2"
+title: "Exercise_2"
 output: github_document
 ---
 
@@ -120,10 +120,25 @@ p_test_250 = ggplot(data = test) +
 p_test_250
 rmse(y_test, ypred_knn250)
 
+kframe <- data.frame("K" = c(), "RMEAN" =c())
+i <- 3
+while (i <= 250) {
+  d = data.frame("K" = i, "RMEAN" = rmse(y_test, knn.reg(train = X_train, test = X_test, y = y_train, k=i)$pred))
+  
+  kframe = rbind(kframe, d)
+  i = i + 1
+
+}
+
+k_vs_rmean = ggplot(data = kframe) + 
+  geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
+  theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
+k_vs_rmean
+
 
 ```
 
-##hallo
+# sclass_65
 
 
 ```{r sclass_65, echo=FALSE}
@@ -222,6 +237,18 @@ p_test_200
 rmse(y_test, ypred_knn200)
 
 
+
+kframe <- data.frame("K" = c(), "RMEAN" =c())
+i <- 3
+while (i <= 200) {
+  d = data.frame("K" = i, "RMEAN" = rmse(y_test, knn.reg(train = X_train, test = X_test, y = y_train, k=i)$pred))
+  kframe = rbind(kframe, d)
+  i = i + 1
+}
+k_vs_rmean = ggplot(data = kframe) + 
+  geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
+  theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
+k_vs_rmean
 
 
 ```
