@@ -6,23 +6,26 @@ output: github_document
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(mosaic)
+#library(mosaic)
 library(FNN)
 sclass = read.csv("data/sclass.csv")
 
 rmse = function(y, ypred) {
   sqrt(mean(data.matrix((y-ypred)^2)))
 }
+k_vs_rmean = NULL
 ```
 
 ## GitHub Documents
 
 This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
 
-## Including Code
+## KNN Practice
 
+We wil be using the K-nearest neighbors technique to predict the price of Mercedes S Class vehicles based on gas mileage. We will be distinguishing these S Class vehicles by trim. In particular, we will be focusing on just two values of trim: 350 and 65 AMG, and finding optimal values of K for predicting the price of each.
 
-```{r sclass_350, echo=FALSE}
+# KNN functions for 350 trim vehciles
+```{r sclass_350, echo=FALSE, autodep=TRUE}
 # Focus on 2 trim levels: 350 and 65 AMG
 sclass350 = subset(sclass, trim == '350')
 dim(sclass350)
@@ -119,7 +122,9 @@ p_test_250 = ggplot(data = test) +
 
 p_test_250
 rmse(y_test, ypred_knn250)
-
+```
+Here we plot the average RMSE for each value of K from 3 to 250, and find that the optimal value of K is 
+```{r sclass_2, echo=FALSE, autodep=TRUE}
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
 while (i <= 250) {
@@ -133,13 +138,12 @@ while (i <= 250) {
 k_vs_rmean = ggplot(data = kframe) + 
   geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
-k_vs_rmean
 
-print(min(kframe$RMEAN))
 
+print(which kframe == min(kframe$RMEAN), arr.ind=TRUE)
 ```
 
-# sclass_65
+# 65 AMG
 
 
 ```{r sclass_65, echo=FALSE}
