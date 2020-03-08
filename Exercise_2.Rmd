@@ -122,9 +122,6 @@ p_test_250 = ggplot(data = test) +
 
 p_test_250
 rmse(y_test, ypred_knn250)
-```
-Here we plot the average RMSE for each value of K from 3 to 250, and find that the optimal value of K is 
-```{r sclass_2, echo=FALSE, autodep=TRUE}
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
 while (i <= 250) {
@@ -139,8 +136,14 @@ k_vs_rmean = ggplot(data = kframe) +
   geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
 
+```
 
-print(which kframe == min(kframe$RMEAN), arr.ind=TRUE)
+Here we plot the average RMSE for each value of K from 3 to 250, and find that the optimal value of K is 
+
+```{r sclass_350_2, echo=FALSE, autodep=TRUE}
+
+k_vs_rmean
+
 ```
 
 # 65 AMG
@@ -253,10 +256,14 @@ while (i <= 200) {
 k_vs_rmean = ggplot(data = kframe) + 
   geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
-k_vs_rmean
-
 
 print(min(kframe$RMEAN))
 ```
 
+write stuff here!
 
+```{r sclass_65_2, echo=FALSE, autodep=TRUE}
+
+k_vs_rmean
+
+```

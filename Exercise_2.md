@@ -21,53 +21,36 @@ values of K for predicting the price of each.
 
 ![](Exercise_2_files/figure-gfm/sclass_350-1.png)<!-- -->
 
-    ## [1] 11262.72
+    ## [1] 11847.07
 
 ![](Exercise_2_files/figure-gfm/sclass_350-2.png)<!-- -->
 
-    ## [1] 9740.887
+    ## [1] 11063.13
 
 ![](Exercise_2_files/figure-gfm/sclass_350-3.png)<!-- -->
 
-    ## [1] 9569.883
+    ## [1] 10708.52
 
 ![](Exercise_2_files/figure-gfm/sclass_350-4.png)<!-- -->
 
-    ## [1] 9808.211
+    ## [1] 10784.93
 
 ![](Exercise_2_files/figure-gfm/sclass_350-5.png)<!-- -->
 
-    ## [1] 10166.67
+    ## [1] 11158.3
 
 ![](Exercise_2_files/figure-gfm/sclass_350-6.png)<!-- -->
 
-    ## [1] 11344.34
+    ## [1] 12366.65
 
 ![](Exercise_2_files/figure-gfm/sclass_350-7.png)<!-- -->
 
-    ## [1] 17985.58
+    ## [1] 17835.59
 
 Here we plot the average RMSE for each value of K from 3 to 250, and
 find that the optimal value of K is
 
-``` kplot
-kframe <- data.frame("K" = c(), "RMEAN" =c())
-i <- 3
-while (i <= 250) {
-  d = data.frame("K" = i, "RMEAN" = rmse(y_test, knn.reg(train = X_train, test = X_test, y = y_train, k=i)$pred))
-  
-  kframe = rbind(kframe, d)
-  i = i + 1
-
-}
-
-k_vs_rmean = ggplot(data = kframe) + 
-  geom_point(mapping = aes(x = K, y = RMEAN), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN), color='red')
-k_vs_rmean
-
-print(which kframe == min(kframe$RMEAN), arr.ind=TRUE)
-```
+![](Exercise_2_files/figure-gfm/sclass_350_2-1.png)<!-- -->
 
 # 65 AMG
 
@@ -75,32 +58,34 @@ print(which kframe == min(kframe$RMEAN), arr.ind=TRUE)
 
 ![](Exercise_2_files/figure-gfm/sclass_65-1.png)<!-- -->
 
-    ## [1] 24517.79
+    ## [1] 18121.99
 
 ![](Exercise_2_files/figure-gfm/sclass_65-2.png)<!-- -->
 
-    ## [1] 21290.39
+    ## [1] 17064.17
 
 ![](Exercise_2_files/figure-gfm/sclass_65-3.png)<!-- -->
 
-    ## [1] 19735.25
+    ## [1] 16939.4
 
 ![](Exercise_2_files/figure-gfm/sclass_65-4.png)<!-- -->
 
-    ## [1] 19340.9
+    ## [1] 18274.73
 
 ![](Exercise_2_files/figure-gfm/sclass_65-5.png)<!-- -->
 
-    ## [1] 20513.41
+    ## [1] 26557.62
 
 ![](Exercise_2_files/figure-gfm/sclass_65-6.png)<!-- -->
 
-    ## [1] 33507.61
+    ## [1] 39128.37
 
 ![](Exercise_2_files/figure-gfm/sclass_65-7.png)<!-- -->
 
-    ## [1] 70033.17
+    ## [1] 68063.88
 
-![](Exercise_2_files/figure-gfm/sclass_65-8.png)<!-- -->
+    ## [1] 16939.4
 
-    ## [1] 18796.49
+write stuff here\!
+
+![](Exercise_2_files/figure-gfm/sclass_65_2-1.png)<!-- -->
