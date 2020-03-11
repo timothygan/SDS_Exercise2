@@ -72,6 +72,14 @@ rmse_vals = do(100)*{
   saratoga_train = SaratogaHouses[train_cases,]
   saratoga_test = SaratogaHouses[test_cases,]
   
+  
+  #KNN
+  X_train = select(saratoga_train, . - fireplaces - sewer - heating)
+  y_train = select(saratoga_train, price)
+  X_test = select(saratoga_test, . - fireplaces - sewer - heating)
+  y_test = select(saratoga_test, price)
+  
+  
   # Fit to the training data
   lm1 = lm(price ~ lotSize + bedrooms + bathrooms, data=saratoga_train)
   lm2 = lm(price ~ . - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
@@ -81,18 +89,48 @@ rmse_vals = do(100)*{
                      bedrooms + fireplaces + bathrooms + rooms + heating + fuel +
                      centralAir + lotSize:heating + livingArea:rooms + newConstruction + livingArea:newConstruction, data=saratoga_train)
   
+  
+
+  
+  nostuff = lm(price ~ . - fireplaces - sewer - heating, data=saratoga_train)
   # Predictions out of sample
   yhat_test1 = predict(lm1, saratoga_test)
   yhat_test2 = predict(lm2, saratoga_test)
   yhat_test3 = predict(lm3, saratoga_test)
   yhat_test4 = predict(lm_dominate, saratoga_test)
+  yhat_test5 = predict(nostuff, saratoga_test)
+
   
   c(rmse(saratoga_test$price, yhat_test1),
     rmse(saratoga_test$price, yhat_test2),
-    rmse(saratoga_test$price, yhat_test3),
-    rmse(saratoga_test$price, yhat_test4))
+    #rmse(saratoga_test$price, yhat_test3),
+    rmse(saratoga_test$price, yhat_test4),
+    rmse(saratoga_test$price, yhat_test5))
 }
 
 rmse_vals
 colMeans(rmse_vals)
 boxplot(rmse_vals)
+
+
+
+
+
+
+
+
+
+# KNN 250
+
+
+knn250 = knn.reg(train = X_train, test = X_test, y = y_train, k=250)
+ypred_knn250 = knn250$pred
+test$ypred_knn250 = ypred_knn250
+
+p_test_250 = ggplot(data = test) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
+  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn250), color='red')
+
+p_test_250
+rmse(y_test, ypred_knn250)
+
