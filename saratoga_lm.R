@@ -124,6 +124,45 @@ rmse_vals = do(100)*{
     rmse(ytest, knn_model$pred))
 }
 
+kframe <- data.frame("K" = c(), "RMEAN_AVERAGE" =c())
+i <- 3
+while(i <= 200){
+  avg_cols = do(100)*{
+    
+    # re-split into train and test cases with the same sample sizes
+    train_cases = sample.int(n, n_train, replace=FALSE)
+    test_cases = setdiff(1:n, train_cases)
+    saratoga_train = SaratogaHouses[train_cases,]
+    saratoga_test = SaratogaHouses[test_cases,]
+    Xtrain = model.matrix(~ . - (price + sewer + fireplaces + heating) - 1, data=saratoga_train)
+    Xtest = model.matrix(~ . - (price + sewer + fireplaces + heating) - 1, data=saratoga_test)
+    
+    ytrain = saratoga_train$price
+    ytest = saratoga_test$price
+    
+    scale_train = apply(Xtrain, 2, sd)
+    Xtilde_train = scale(Xtrain, scale = scale_train)
+    Xtilde_test = scale(Xtest, scale = scale_train)
+    
+    head(Xtrain, 2)
+    head(Xtilde_train, 2) %>% round(3)
+    knn_model = knn.reg(Xtilde_train, Xtilde_test, ytrain, k=i)
+    
+    c(rmse(ytest, knn_model$pred))
+  }
+  d = data.frame("K" = i, "RMEAN_AVERAGE" = mean(avg_cols[["result"]]))
+  
+  kframe = rbind(kframe, d)
+  i = i + 1
+  print(i)
+}
+
+print("hi")
+k_vs_rmean = ggplot(data = kframe) + 
+  geom_point(mapping = aes(x = K, y = RMEAN_AVERAGE), color='lightgrey') + 
+  theme_bw(base_size=18) + geom_path(aes(x = K, y = RMEAN_AVERAGE), color='red')
+k_vs_rmean
+
 # Xtrain = model.matrix(~ .  - (price + sewer + fireplaces + heating) - 1, data=saratoga_train)
 # Xtest = model.matrix(~ .  - (price + sewer + fireplaces + heating) - 1, data=saratoga_test)
 # 
