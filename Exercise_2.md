@@ -1,4 +1,4 @@
-Exercise\_2
+Exercise 2
 ================
 
 ## KNN Practice
