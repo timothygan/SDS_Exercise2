@@ -61,8 +61,6 @@ while(i <= 50){
     c(rmse(ytest, knn_model$pred))
   }
   d = data.frame("K" = i, "RMEAN_AVERAGE" = mean(avg_cols[["result"]]))
-  print(i)
-  print( mean(avg_cols[["result"]]))
   kframe_s = rbind(kframe_s, d)
   i = i + 1
   
@@ -180,7 +178,7 @@ news_test_viral = ifelse(news_test$shares > 1400, 1, 0)
 
 knn_test_viral = ifelse(knn_model$pred > 1400, 1, 0) 
 
-confusion_out_after = table(y = news_test_viral, o = knn_test_viral)
+confusion_out_after = table(y = news_test_viral, pred = knn_test_viral)
 single_confusion_table_after = confusion_out_after
 
 pec_after = pcg(confusion_out_after)
@@ -285,7 +283,7 @@ knn_model = knn.reg(Xtilde_train, Xtilde_test, ytrain, k=5)
 
 knn_test_viral = ifelse(knn_model$pred > .5, 1, 0) 
 
-confusion_out_before = table(y = news_test$viral, o = knn_test_viral)
+confusion_out_before = table(y = news_test$viral, pred = knn_test_viral)
 single_confusion_out_before = confusion_out_before
 pec_before = pcg(confusion_out_before)
 single_pec_before = pec_before
@@ -332,9 +330,9 @@ while(i <= 50){
   
   
   knn_test_viral = ifelse(knn_model$pred > .5, 1, 0) 
-  
-  new_confusion_out = table(y = news_test$viral, o = knn_test_viral)
-  
+  knn_test_null = ifelse(knn_model$pred > 2, 0, 1)
+  new_confusion_out = table(y = news_test$viral, pred = knn_test_viral)
+  null_model = table(y = news_test$viral, pred = knn_test_null)
   confusion_out_before[1] = (confusion_out_before[1]+new_confusion_out[1])/2
   confusion_out_before[2] = (confusion_out_before[2]+new_confusion_out[2])/2
   confusion_out_before[3] = (confusion_out_before[3]+new_confusion_out[3])/2
@@ -355,10 +353,6 @@ while(i <= 50){
 
 ```
 
-## GitHub Documents
-
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
 ## KNN Practice
 
 We wil be using the K-nearest neighbors technique to predict the price of Mercedes S Class vehicles based on gas mileage. We will be distinguishing these S Class vehicles by trim. In particular, we will be focusing on just two values of trim: 350 and 65 AMG, and finding optimal values of K for predicting the price of each.
@@ -367,7 +361,7 @@ We wil be using the K-nearest neighbors technique to predict the price of Merced
 ```{r sclass_350, echo=FALSE, autodep=TRUE}
 # Focus on 2 trim levels: 350 and 65 AMG
 sclass350 = subset(sclass, trim == '350')
-dim(sclass350)
+#dim(sclass350)
 
 N = nrow(sclass350)
 N_train = floor(0.8*N)
@@ -413,27 +407,27 @@ test$ypred_knn20 = ypred_knn20
 test$ypred_knn50 = ypred_knn50
 test$ypred_knn100 = ypred_knn100
 
-p_test_3 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn3), color='red')
+#p_test_3 = ggplot(data = test) + 
+#  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
+#  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn3), color='red')
 
-p_test_3
-rmse(y_test, ypred_knn3)
+#p_test_3
+#rmse(y_test, ypred_knn3)
 
 
-p_test_10 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn10), color='red')
+#p_test_10 = ggplot(data = test) + 
+#  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
+#  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn10), color='red')
 
-p_test_10
-rmse(y_test, ypred_knn10)
+#p_test_10
+#rmse(y_test, ypred_knn10)
 
-p_test_50 = ggplot(data = test) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
-  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn50), color='red')
+#p_test_50 = ggplot(data = test) + 
+#  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
+#  theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn50), color='red')
 
-p_test_50
-rmse(y_test, ypred_knn50)
+#p_test_50
+#rmse(y_test, ypred_knn50)
 
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
@@ -464,7 +458,7 @@ k_vs_rmean
 ```{r sclass_65, echo=FALSE}
 # Focus on 2 trim levels: 350 and 65 AMG
 sclass65 = subset(sclass, trim == '65 AMG')
-dim(sclass65)
+
 
 N = nrow(sclass65)
 N_train = floor(0.8*N)
@@ -511,23 +505,20 @@ p_test_3 = ggplot(data = test) +
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn3), color='red')
 
-p_test_3
-rmse(y_test, ypred_knn3)
+
 
 p_test_10 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn10), color='red')
 
-p_test_10
-rmse(y_test, ypred_knn10)
+
 
 
 p_test_50 = ggplot(data = test) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey') + 
   theme_bw(base_size=18) + geom_path(aes(x = mileage, y = ypred_knn50), color='red')
 
-p_test_50
-rmse(y_test, ypred_knn50)
+
 
 kframe <- data.frame("K" = c(), "RMEAN" =c())
 i <- 3
@@ -595,36 +586,69 @@ boxplot(rmse_vals)
 As you can see, the K-nearest neighbor model outperformed each of the sample models, but did worse than our linear model. 
 
 ### Conclusion
-Both the linearn and KNN models consistently outperform the sample models, indicating that sewer type, heating type and number of fireplaces do not have a strong effect on the price of houses compared to the rest of the features used.  In addition, two of the sample models discarded waterfront and land value while we included each of these in our models, indicating that one or both are strong indicators of the price of a house. Since it performed the best of the 5 models tested, we recommend using our linear model to predict housing prices going forward.
+Both the linear and KNN models consistently outperform the sample models, indicating that sewer type, heating type and number of fireplaces do not have a strong effect on the price of houses compared to the rest of the features used.  In addition, two of the sample models discarded waterfront and land value while we included each of these in our models, indicating that one or both are strong indicators of the price of a house. Since it performed the best of the 5 models tested, we recommend using our linear model to predict housing prices going forward.
+
+
+## Predicting when articles go viral
+
+We will be building two models to predict whether a given article on Mashable.com will go viral or not. An article is classified as viral if it receives greater than 1400 shares. The first model will be trained to predict shares as a target variable, and then classify it as viral if it predicts greater than 1400 shares. The second model will be trained to predict virality as it's target variable, ignoring the number of shares and only focusing on whether or not an article went viral.
+
+### The Data
+We will be using data on 39,797 online rticles published by Mashable during 2013 and 2014. This data contains information on each article such as the length of it's title, the length of the article itself, and the positivity/negativity of the words used in the article. The features we will be focusing on to train our two models are listed below:
+
+- num_imgs: Number of images.
+- n_tokens_title: Number of words in the title.
+- data_channel_is_entertainment: Is the data channel "entertainment"?
+- data_channel_is_world: Is the data channel "World"? 
+- data_channel_is_socmed: Is the data channel "Social Media"
+- self_reference_avg_shares: The average number of shares of other mashable articles linked to from this article
+- global_rate_positive_words: Rate of positive words in content
+- global_rate_negative_words: Rate of negative words in content
+- avg_negative_polarity: average negative polarity of words in content 
+
+Our theory is that articles with shorter titles are less likely to be ignored and thus more likely to be clicked on and shared. We also believe that articles with overtly emotional content (either positive or negative) are more likely to be shared. We chose to include the social media and entertainment channels because viral content tends to be related to either of these categories. The rest of the features such as data_channel_is_world we chose simply because our models tended to perform better with them included.
+
+### Performance
+The confusion matrix, overall error rate, true positive rate, and false positive rate for the two models (averaged over many different train/test splits) are shown below:
+
+#### Model 1
+
 
 ``` {r online_news, echo=FALSE, autodep=TRUE, warning=FALSE}
-n = nrow(news)
-n_train = round(0.8*n)  # round to nearest integer
-n_test = n - n_train
-n_train = round(0.8*n)  # round to nearest integer
-n_test = n - n_train
-rmse_vals = do(100)*{
-  
-  # re-split into train and test cases with the same sample sizes
-  train_cases = sample.int(n, n_train, replace=FALSE)
-  test_cases = setdiff(1:n, train_cases)
-  news_train = news[train_cases,]
-  news_test = news[test_cases,]
-  
-  # Fit to the training data
-
-  our_model = lm(shares ~ n_tokens_title + num_imgs + num_keywords + 
-                   data_channel_is_entertainment + data_channel_is_tech +
-                   weekday_is_friday + weekday_is_saturday + 
-                   weekday_is_sunday + title_subjectivity + title_sentiment_polarity + avg_negative_polarity, data=news_train)
-
-  
-  # Predictions out of sample
-
-  yhat_test = predict(our_model, news_test)
-
-  
-  c(rmse(news_test$shares, yhat_test))
-}
-
+confusion_out_after
 ```
+
+Overall error rate: `r 1 - pec_after`
+
+True positive rate: `r true_pos_after`
+
+False positve rate: `r false_pos_after`
+
+#### Model 2
+``` {r online_news2, echo=FALSE, autodep=TRUE, warning=FALSE}
+confusion_out_before
+```
+
+Overall error rate: `r 1 - pec_before`
+
+True positive rate: `r true_pos_before`
+
+False positve rate: `r false_pos_before`
+
+#### Null Model
+
+To provide context to each of the models, we provide a "Null Model" that simply predicts that every article will go viral:
+
+``` {r online_news3, echo=FALSE, autodep=TRUE, warning=FALSE}
+null_model
+```
+
+Overall error rate: `r null_model[1] /(null_model[1] + null_model[2])`
+
+True positive rate: `1.0`
+
+False positive rate: `r null_model[1] / (null_model[1] + null_model[2])`
+
+### Conclusion
+
+The two models have a similar error rate, with the 2nd model performing slightly better. However, the first model has a significantly higher true positive rate. One explanation for this is that since the first model is trained to predict the number of shares for a given article, it is able to account for articles that go very viral (i.e have significanly more than 1400 shares), and give them and their features more weight. However the second model is mostly blind to the number of shares an article received. An article that received exactly 1401 shares and an article that received 10,000 shares are given the same weight in training and prediction. Both models out-perform the null model, suggesting that the features we selected are indicators of whether or not an article will go viral.
